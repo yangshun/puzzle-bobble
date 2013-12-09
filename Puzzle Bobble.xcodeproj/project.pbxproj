@@ -22,6 +22,7 @@
 		6D2CCD581854F92100BC72F6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D2CCD561854F92100BC72F6 /* InfoPlist.strings */; };
 		6D2CCD5A1854F92100BC72F6 /* Puzzle_BobbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD591854F92100BC72F6 /* Puzzle_BobbleTests.m */; };
 		6D2CCD651854F97900BC72F6 /* Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD641854F97900BC72F6 /* Bubble.m */; };
+		6D2CCD681855F6EB00BC72F6 /* BubbleArena.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD671855F6EB00BC72F6 /* BubbleArena.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,9 @@
 		6D2CCD591854F92100BC72F6 /* Puzzle_BobbleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Puzzle_BobbleTests.m; sourceTree = "<group>"; };
 		6D2CCD631854F97900BC72F6 /* Bubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bubble.h; sourceTree = "<group>"; };
 		6D2CCD641854F97900BC72F6 /* Bubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bubble.m; sourceTree = "<group>"; };
+		6D2CCD661855F6EB00BC72F6 /* BubbleArena.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleArena.h; sourceTree = "<group>"; };
+		6D2CCD671855F6EB00BC72F6 /* BubbleArena.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleArena.m; sourceTree = "<group>"; };
+		6D2CCD691856003800BC72F6 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,12 +120,15 @@
 			isa = PBXGroup;
 			children = (
 				6D2CCD3D1854F92100BC72F6 /* AppDelegate.h */,
+				6D2CCD691856003800BC72F6 /* Constants.h */,
 				6D2CCD3E1854F92100BC72F6 /* AppDelegate.m */,
 				6D2CCD401854F92100BC72F6 /* Main.storyboard */,
 				6D2CCD431854F92100BC72F6 /* ViewController.h */,
 				6D2CCD441854F92100BC72F6 /* ViewController.m */,
 				6D2CCD631854F97900BC72F6 /* Bubble.h */,
 				6D2CCD641854F97900BC72F6 /* Bubble.m */,
+				6D2CCD661855F6EB00BC72F6 /* BubbleArena.h */,
+				6D2CCD671855F6EB00BC72F6 /* BubbleArena.m */,
 				6D2CCD461854F92100BC72F6 /* Images.xcassets */,
 				6D2CCD351854F92100BC72F6 /* Supporting Files */,
 			);
@@ -254,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D2CCD681855F6EB00BC72F6 /* BubbleArena.m in Sources */,
 				6D2CCD451854F92100BC72F6 /* ViewController.m in Sources */,
 				6D2CCD3F1854F92100BC72F6 /* AppDelegate.m in Sources */,
 				6D2CCD3B1854F92100BC72F6 /* main.m in Sources */,

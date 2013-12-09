@@ -10,11 +10,13 @@
 
 @implementation Bubble
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
+- (id)initWithPosition:(CGPoint)pos {
+    self = [super initWithFrame:CGRectMake(0, 0, BUBBLE_DIAMETER, BUBBLE_DIAMETER)];
     if (self) {
         // Initialization code
+        self.center = pos;
+        self.occupied = false;
+        self.layer.cornerRadius = BUBBLE_DIAMETER/2;
     }
     return self;
 }
