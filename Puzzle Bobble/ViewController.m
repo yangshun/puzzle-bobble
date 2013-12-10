@@ -29,10 +29,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 
-    arena = [[BubbleArena alloc] init];
-    [arena initializeArenaModel];
-    [arena initializeLevel];
-    [arena initializeBubbleViewsInView:self.view];
+    arena = [[BubbleArena alloc] initWithView:self.view];
+    [arena prepareLevel];
 
     tapRecognizer = [[UITapGestureRecognizer alloc]
                      initWithTarget:self action:@selector(shootBubble:)];
@@ -49,6 +47,7 @@
 }
 
 - (void)prepareBubbleToBeFired {
+    [activeBubble removeFromSuperview];
     activeBubble = [[Bubble alloc] initWithPosition:activeBubbleStartPosition];
     activeBubble.color = [arena getNextBubbleColor];
     activeBubble.layer.cornerRadius = BUBBLE_DIAMETER/2;
@@ -82,12 +81,27 @@
     }
     
     if ([arena checkCollisionWithActiveBubble:activeBubble]) {
+        activeBubble = nil;
         [timer invalidate];
         tapRecognizer.enabled = YES;
         [self prepareBubbleToBeFired];
     }
 }
 
+
+- (IBAction)resetGame:(id)sender {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Level"
+                                                    message:@"Are you sure you want to reset the level?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [arena resetLevel];
+    [self prepareBubbleToBeFired];
+}
 
 - (void)didReceiveMemoryWarning
 {

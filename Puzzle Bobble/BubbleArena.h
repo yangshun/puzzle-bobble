@@ -10,13 +10,12 @@
 #import "Constants.h"
 #import "Bubble.h"
 
-@interface BubbleArena : NSObject
+@interface BubbleArena : NSObject <UIAlertViewDelegate>
 
-
-- (void)initializeArenaModel;
-- (void)initializeLevel;
-- (void)initializeBubbleViewsInView:(UIView*)view;
+- (id)initWithView:(UIView*)view;
+- (void)prepareLevel;
 - (BOOL)checkCollisionWithActiveBubble:(Bubble*)bubble;
 - (BubbleColor)getNextBubbleColor;
+- (void)resetLevel;
 
 @end

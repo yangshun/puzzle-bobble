@@ -11,16 +11,23 @@
 
 @implementation BubbleArena {
 
-    Bubble* bubblesGrid[NUMBER_OF_ROWS][NUMBER_OF_COLS];
+    Bubble *bubblesGrid[NUMBER_OF_ROWS][NUMBER_OF_COLS];
+    UIView *gameView;
 }
 
-- (id)init {
+- (id)initWithView:(UIView*)view {
     
     self = [super init];
     if (self) {
-        
+        gameView = view;
     }
     return self;
+}
+
+- (void)prepareLevel {
+    [self initializeArenaModel];
+    [self initializeLevel];
+    [self initializeBubbleViews];
 }
 
 - (void)initializeArenaModel {
@@ -69,11 +76,11 @@
     }
 }
 
-- (void)initializeBubbleViewsInView:(UIView*)view {
+- (void)initializeBubbleViews {
     for (int j = 0; j < NUMBER_OF_ROWS; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
             if (bubblesGrid[j][i].occupied) {
-                [view addSubview:bubblesGrid[j][i]];
+                [gameView addSubview:bubblesGrid[j][i]];
             }
         }
     }
@@ -322,9 +329,32 @@
     if (length > 0) {
         return ((NSNumber*)availableColorArray[arc4random()%length]).intValue;
     } else {
-        // defaults to red
-        return Red;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Level Complete!"
+                                                        message:@"Good job! Play again?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Yes"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self resetLevel];
+        return [self getNextBubbleColor];
     }
+}
+
+- (void)alertViewCancel:(UIAlertView *)alertView {
+    [self resetLevel];
+}
+
+- (void)resetLevel {
+    for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+        for (int i = 0; i < NUMBER_OF_COLS; i++) {
+            if (j % 2 == 1 && i == NUMBER_OF_COLS - 1) {
+                continue;
+            } else {
+                [bubblesGrid[j][i] removeFromSuperview];
+            }
+        }
+    }
+    [self prepareLevel];
 }
 
 @end
