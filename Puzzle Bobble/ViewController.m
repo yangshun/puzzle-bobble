@@ -45,6 +45,7 @@
     
     activeBubbleStartPosition = CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT - BUBBLE_DIAMETER/2);
     [self prepareBubbleToBeFired];
+    [arena test];
 }
 
 - (void)prepareBubbleToBeFired {

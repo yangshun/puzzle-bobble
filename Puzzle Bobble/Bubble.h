@@ -15,9 +15,8 @@
 @property (nonatomic, assign) BubbleColor color;
 @property (nonatomic, assign) int row;
 @property (nonatomic, assign) int col;
-@property (nonatomic, assign) BOOL visited;
 
+- (id)initWithPosition:(CGPoint)pos row:(int)row col:(int)col;
 - (id)initWithPosition:(CGPoint)pos;
-
 
 @end

@@ -12,7 +12,6 @@
 @implementation BubbleArena {
 
     Bubble* bubblesGrid[NUMBER_OF_ROWS][NUMBER_OF_COLS];
-    CGPoint bubblesLocation[NUMBER_OF_ROWS][NUMBER_OF_COLS];
 }
 
 - (id)init {
@@ -26,33 +25,40 @@
 
 - (void)initializeArenaModel {
     
-    CGFloat rowOffset = BUBBLE_DIAMETER * sin(M_PI/3);
-
     for (int j = 0; j < NUMBER_OF_ROWS; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
-            CGPoint position;
-            if (j % 2 == 0) {
-                position = CGPointMake(i * BUBBLE_DIAMETER + BUBBLE_DIAMETER/2,
-                                            j * rowOffset + BUBBLE_DIAMETER/2);
+            if (j % 2 == 1 && i == NUMBER_OF_COLS - 1) {
+                continue;
             } else {
-                // odd rows have 1 less bubble
-                position = CGPointMake((i+1) * BUBBLE_DIAMETER,
-                                            j * rowOffset + BUBBLE_DIAMETER/2);
-                if (i == NUMBER_OF_COLS - 1) { break; }
+                [self initializeEmptyBubbleAtRow:j Col:i];
             }
-            Bubble *b = [[Bubble alloc] initWithPosition:position];
-            b.row = j;
-            b.col = i;
-            bubblesGrid[j][i] = b;
         }
     }
+}
+
+- (void)initializeEmptyBubbleAtRow:(int)row Col:(int)col {
+    
+    CGFloat rowOffset = BUBBLE_DIAMETER * sin(M_PI/3);
+    CGPoint position;
+    if (row % 2 == 0) {
+        position = CGPointMake(col * BUBBLE_DIAMETER + BUBBLE_DIAMETER/2,
+                               row * rowOffset + BUBBLE_DIAMETER/2);
+    } else {
+        // odd rows have 1 less bubble
+        position = CGPointMake((col+1) * BUBBLE_DIAMETER,
+                               row * rowOffset + BUBBLE_DIAMETER/2);
+    }
+    Bubble *b = [[Bubble alloc] initWithPosition:position
+                                             row:row
+                                             col:col];
+    bubblesGrid[row][col] = b;
 }
 
 - (void)initializeLevel {
     // code to read from file here
     
     // hardcoded level 1
-    for (int j = 0; j < 8; j++) {
+    for (int j = 0; j < 4; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
             if (j % 2 == 1 && i == NUMBER_OF_COLS - 1) {
                 continue;
@@ -83,6 +89,7 @@
                 if (dist < BUBBLE_DIAMETER) {
 
                     Bubble *bubble = [self attachBubbleAtNearestAvailablePositionOfCollisionPoint:activeBubble];
+                    [self handleBubbleCollisionInteraction:bubble];
                     return YES;
                     break;
                 }
@@ -112,8 +119,57 @@
     
     bubble.center = bubblesGrid[minJ][minI].center;
     bubblesGrid[minJ][minI] = bubble;
+    bubble.row = minJ;
+    bubble.col = minI;
     bubblesGrid[minJ][minI].occupied = YES;
+
     return bubble;
+}
+
+- (void)handleBubbleCollisionInteraction:(Bubble*)bubble {
+    
+    NSLog(@"Shot");
+    
+    // modified breadth-first search
+    Queue *q = [Queue new];
+    NSMutableSet *V = [NSMutableSet new];
+    [q enqueue:bubble];
+    [V addObject:bubble];
+    
+    while (![q isEmpty]) {
+        Bubble *t = [q dequeue];
+        NSArray *adjacentBubbles = [self getAdjacentBubbles:t];
+//        NSLog(@"row: %d, col: %d", t.row, t.col);
+        //        NSLog(@"Adjacent bubbles: %d ", adjacentBubbles.count);
+//        for (Bubble *b in adjacentBubbles) {
+//            NSLog(@"row: %d, col: %d, occupancy: %d", b.row, b.col, b.occupied);
+//        }
+        
+        NSArray *adjacentOccupiedBubbles = [self filterOccupiedBubbles: adjacentBubbles];
+//        NSLog(@"Adjacent occupied bubbles: %d ", adjacentOccupiedBubbles.count);
+        
+//        for (Bubble *b in adjacentOccupiedBubbles) {
+//            NSLog(@"row: %d, col: %d, color: %d", b.row, b.col, b.color);
+//        }
+        
+        NSArray *adjacentBubblesOfSameColor = [self filterBubbles:adjacentOccupiedBubbles
+                                                          ofColor:bubble.color];
+//        NSLog(@"Same color: %d ", adjacentBubblesOfSameColor.count);
+        for (Bubble *b in adjacentBubblesOfSameColor) {
+            if (![V containsObject:b]) {
+                [V addObject:b];
+                [q enqueue:b];
+            }
+        }
+//        NSLog(@"Number of elements in queue: %d", [q length]);
+        
+    }
+    if (V.count >= 3) {
+        for (Bubble *b in V) {
+            [b removeFromSuperview];
+            [self initializeEmptyBubbleAtRow:b.row Col:b.col];
+        }
+    }
 }
 
 - (NSArray*)getAdjacentBubbles:(Bubble*)bubble {
@@ -151,8 +207,9 @@
     // Bottom Left Bubble
     if (row%2 == 0 && row < NUMBER_OF_ROWS-1 && col > 0) {
         Bubble *bottomLeftBubble = bubblesGrid[row+1][col-1];
+        
         [adjacentBubbles addObject:bottomLeftBubble];
-    } else if (row%2 == 1 && row < NUMBER_OF_ROWS - 1) {
+    } else if (row%2 == 1 && row < NUMBER_OF_ROWS-1) {
         Bubble *bottomLeftBubble = bubblesGrid[row+1][col];
         [adjacentBubbles addObject:bottomLeftBubble];
     }
@@ -179,7 +236,7 @@
 }
 
 - (NSArray*)filterOccupiedBubbles:(NSArray*)bubbles {
-    NSMutableArray *occupiedBubbles;
+    NSMutableArray *occupiedBubbles = [NSMutableArray new];
     for (Bubble *b in bubbles) {
         if (b.occupied) {
             [occupiedBubbles addObject:b];
@@ -190,7 +247,7 @@
 
 - (NSArray*)filterBubbles:(NSArray*)bubbles
                   ofColor:(BubbleColor)color {
-    NSMutableArray *sameColorBubbles;
+    NSMutableArray *sameColorBubbles = [NSMutableArray new];
     for (Bubble *b in bubbles) {
         if (b.color == color) {
             [sameColorBubbles addObject:b];
@@ -198,7 +255,5 @@
     }
     return [NSArray arrayWithArray:sameColorBubbles];
 }
-
-
 
 @end

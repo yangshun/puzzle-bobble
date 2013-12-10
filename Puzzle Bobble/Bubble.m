@@ -12,6 +12,15 @@
 
 @synthesize color;
 
+- (id)initWithPosition:(CGPoint)pos row:(int)row col:(int)col {
+    self = [self initWithPosition:pos];
+    if (self) {
+        self.row = row;
+        self.col = col;
+    }
+    return self;
+}
+
 - (id)initWithPosition:(CGPoint)pos {
     self = [super initWithFrame:CGRectMake(0, 0, BUBBLE_DIAMETER, BUBBLE_DIAMETER)];
     if (self) {
@@ -19,12 +28,12 @@
         self.center = pos;
         self.occupied = NO;
         self.layer.cornerRadius = BUBBLE_DIAMETER/2;
-        self.visited = NO;
     }
     return self;
 }
 
 - (void)setColor:(BubbleColor)c {
+    color = c;
     switch (c) {
         case Red:
             self.backgroundColor = [UIColor redColor];
