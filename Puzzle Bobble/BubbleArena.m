@@ -80,6 +80,9 @@
 }
 
 - (BOOL)checkCollisionWithActiveBubble:(Bubble *)activeBubble {
+    BOOL collision = NO;
+    
+    // Check for collision with other bubbles
     for (int j = 0; j < NUMBER_OF_ROWS; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
             Bubble *b = bubblesGrid[j][i];
@@ -87,16 +90,78 @@
                 CGFloat dist = sqrtf(powf(activeBubble.center.x - b.center.x, 2) +
                                      powf(activeBubble.center.y - b.center.y, 2));
                 if (dist < BUBBLE_DIAMETER) {
-
-                    Bubble *bubble = [self attachBubbleAtNearestAvailablePositionOfCollisionPoint:activeBubble];
-                    [self handleBubbleCollisionInteraction:bubble];
-                    return YES;
-                    break;
+                    collision = YES;
                 }
             }
         }
     }
-    return NO;
+    
+    // Check for collision with top wall
+    if (activeBubble.center.y < BUBBLE_DIAMETER/2) {
+        collision = YES;
+    }
+    
+    if (collision) {
+        Bubble *bubble = [self attachBubbleAtNearestAvailablePositionOfCollisionPoint:activeBubble];
+        [self handleCollisionOfActiveBubble:bubble];
+    }
+    
+    return collision;
+}
+
+- (void)handleCollisionOfActiveBubble:(Bubble*)bubble {
+
+    NSSet *adjacentColoredBubbles = [self getAdjacentBubblesOfBubble:bubble andSameColor:YES];
+    if (adjacentColoredBubbles.count >= 3) {
+        [self removeBubbles:adjacentColoredBubbles withBurstAnimation:YES];
+    }
+    
+    NSMutableSet *bubblesAttachedToTop = [NSMutableSet new];
+    for (int i = 0; i < NUMBER_OF_COLS; i++) {
+        Bubble *b = bubblesGrid[0][i];
+        if (b.occupied) {
+            NSSet *adjacentBubbles = [self getAdjacentBubblesOfBubble:b andSameColor:NO];
+            [bubblesAttachedToTop unionSet:adjacentBubbles];
+        }
+    }
+    
+    NSMutableSet *allOccupiedBubbles = [NSMutableSet new];
+    for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+        for (int i = 0; i < NUMBER_OF_COLS; i++) {
+            Bubble *b = bubblesGrid[j][i];
+            if (b.occupied) {
+                [allOccupiedBubbles addObject:b];
+            }
+        }
+    }
+    
+    [allOccupiedBubbles minusSet:bubblesAttachedToTop];
+
+    [self removeBubbles:allOccupiedBubbles withBurstAnimation:NO];
+}
+
+- (void)removeBubbles:(NSSet*)bubbles withBurstAnimation:(BOOL)burst {
+    for (Bubble *b in bubbles) {
+        if (burst) {
+            [UIView animateWithDuration:0.2
+                             animations:^{
+                                 b.alpha = 0.0f;
+                                 b.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                             }
+                             completion:^(BOOL finished){
+                                 [b removeFromSuperview];
+                             }];
+        } else {
+            [UIView animateWithDuration:0.5
+                             animations:^{
+                                 b.center = CGPointMake(b.center.x, b.center.y + SCREEN_HEIGHT);
+                             }
+                             completion:^(BOOL finished){
+                                 [b removeFromSuperview];
+                             }];
+        }
+        [self initializeEmptyBubbleAtRow:b.row Col:b.col];
+    }
 }
 
 - (Bubble*)attachBubbleAtNearestAvailablePositionOfCollisionPoint:(Bubble*)bubble {
@@ -126,9 +191,7 @@
     return bubble;
 }
 
-- (void)handleBubbleCollisionInteraction:(Bubble*)bubble {
-    
-    NSLog(@"Shot");
+- (NSSet*)getAdjacentBubblesOfBubble:(Bubble*)bubble andSameColor:(BOOL)same {
     
     // modified breadth-first search
     Queue *q = [Queue new];
@@ -138,39 +201,25 @@
     
     while (![q isEmpty]) {
         Bubble *t = [q dequeue];
-        NSArray *adjacentBubbles = [self getAdjacentBubbles:t];
-//        NSLog(@"row: %d, col: %d", t.row, t.col);
-        //        NSLog(@"Adjacent bubbles: %d ", adjacentBubbles.count);
-//        for (Bubble *b in adjacentBubbles) {
-//            NSLog(@"row: %d, col: %d, occupancy: %d", b.row, b.col, b.occupied);
-//        }
-        
-        NSArray *adjacentOccupiedBubbles = [self filterOccupiedBubbles: adjacentBubbles];
-//        NSLog(@"Adjacent occupied bubbles: %d ", adjacentOccupiedBubbles.count);
-        
-//        for (Bubble *b in adjacentOccupiedBubbles) {
-//            NSLog(@"row: %d, col: %d, color: %d", b.row, b.col, b.color);
-//        }
-        
-        NSArray *adjacentBubblesOfSameColor = [self filterBubbles:adjacentOccupiedBubbles
-                                                          ofColor:bubble.color];
-//        NSLog(@"Same color: %d ", adjacentBubblesOfSameColor.count);
-        for (Bubble *b in adjacentBubblesOfSameColor) {
+  
+        NSArray *adj = [self filterOccupiedBubbles: [self getAdjacentBubbles:t]];
+        if (same) {
+            adj = [self filterBubbles:adj ofColor:bubble.color];
+        }
+
+        for (Bubble *b in adj) {
             if (![V containsObject:b]) {
                 [V addObject:b];
                 [q enqueue:b];
             }
         }
-//        NSLog(@"Number of elements in queue: %d", [q length]);
         
     }
-    if (V.count >= 3) {
-        for (Bubble *b in V) {
-            [b removeFromSuperview];
-            [self initializeEmptyBubbleAtRow:b.row Col:b.col];
-        }
-    }
+    return V;
+    
 }
+
+
 
 - (NSArray*)getAdjacentBubbles:(Bubble*)bubble {
     int row = bubble.row;

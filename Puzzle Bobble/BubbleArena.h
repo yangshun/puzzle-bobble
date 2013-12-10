@@ -18,5 +18,4 @@
 - (void)initializeBubbleViewsInView:(UIView*)view;
 - (BOOL)checkCollisionWithActiveBubble:(Bubble*)bubble;
 
-- (void)test;
 @end
