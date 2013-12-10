@@ -10,6 +10,8 @@
 
 @implementation Bubble
 
+@synthesize color;
+
 - (id)initWithPosition:(CGPoint)pos {
     self = [super initWithFrame:CGRectMake(0, 0, BUBBLE_DIAMETER, BUBBLE_DIAMETER)];
     if (self) {
@@ -19,6 +21,26 @@
         self.layer.cornerRadius = BUBBLE_DIAMETER/2;
     }
     return self;
+}
+
+- (void)setColor:(BubbleColor)c {
+    switch (c) {
+        case Red:
+            self.backgroundColor = [UIColor redColor];
+            break;
+        case Blue:
+            self.backgroundColor = [UIColor blueColor];
+            break;
+        case Green:
+            self.backgroundColor = [UIColor greenColor];
+            break;
+        case Yellow:
+            self.backgroundColor = [UIColor yellowColor];
+            break;
+        default:
+            self.backgroundColor = [UIColor blackColor];
+            break;
+    }
 }
 
 /*

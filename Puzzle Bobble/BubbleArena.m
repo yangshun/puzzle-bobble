@@ -54,8 +54,8 @@
             if (j % 2 == 1 && i == NUMBER_OF_BUBBLES_IN_ROW - 1) {
                 continue;
             }
-            bubblesGrid[j][i].backgroundColor = [UIColor redColor];
             bubblesGrid[j][i].occupied = YES;
+            bubblesGrid[j][i].color = Red;
         }
     }
 }
@@ -78,7 +78,6 @@
                 CGFloat dist = sqrtf(powf(activeBubble.center.x - b.center.x, 2) +
                                      powf(activeBubble.center.y - b.center.y, 2));
                 if (dist < BUBBLE_DIAMETER) {
-                    NSLog(@"%d %d", j, i);
                     [self attachBubbleAtNearestAvailablePositionOfCollisionPoint:activeBubble];
                     return YES;
                     break;
@@ -86,8 +85,6 @@
             }
         }
     }
-    
-    
     return NO;
 }
 
@@ -109,7 +106,6 @@
         }
     }
     
-    NSLog(@"%d %d", minJ, minI);
     bubble.center = bubblesGrid[minJ][minI].center;
     bubblesGrid[minJ][minI] = bubble;
     bubblesGrid[minJ][minI].occupied = YES;

@@ -16,4 +16,11 @@
 #define SCREEN_HEIGHT 1024.f
 #define BUBBLE_DIAMETER SCREEN_WIDTH/NUMBER_OF_BUBBLES_IN_ROW
 
+typedef enum BubbleColor {
+    Red = 0,
+    Blue = 1,
+    Green = 2,
+    Yellow = 3,
+} BubbleColor;
+
 #endif

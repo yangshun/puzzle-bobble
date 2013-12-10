@@ -16,9 +16,6 @@
 - (void)initializeArenaModel;
 - (void)initializeLevel;
 - (void)initializeBubbleViewsInView:(UIView*)view;
-
-- (Bubble*)getBubbleAtX:(int)j andY:(int)i;
-- (NSArray*)calculateNearestPositionsAtRow:(int)row andCol:(int)col;
 - (BOOL)checkCollisionWithActiveBubble:(Bubble*)bubble;
 
 @end

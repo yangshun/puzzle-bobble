@@ -52,6 +52,7 @@
     activeBubbleVelocity = CGPointMake(-1*(dest.x - start.x)/(dest.y - start.y), -1);
     
     activeBubble = [[Bubble alloc] initWithPosition:start];
+    activeBubble.color = Blue;
     activeBubble.backgroundColor = [UIColor blueColor];
     activeBubble.layer.cornerRadius = BUBBLE_DIAMETER/2;
     [self.view addSubview:activeBubble];
