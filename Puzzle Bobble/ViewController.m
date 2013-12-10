@@ -50,7 +50,7 @@
 
 - (void)prepareBubbleToBeFired {
     activeBubble = [[Bubble alloc] initWithPosition:activeBubbleStartPosition];
-    activeBubble.color = arc4random() % 4;
+    activeBubble.color = [arena getNextBubbleColor];
     activeBubble.layer.cornerRadius = BUBBLE_DIAMETER/2;
     [self.view addSubview:activeBubble];
 
@@ -87,6 +87,7 @@
         [self prepareBubbleToBeFired];
     }
 }
+
 
 - (void)didReceiveMemoryWarning
 {

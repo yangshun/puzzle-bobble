@@ -305,4 +305,26 @@
     return [NSArray arrayWithArray:sameColorBubbles];
 }
 
+
+- (BubbleColor)getNextBubbleColor {
+    NSMutableSet *availableColorSet = [NSMutableSet new];
+    for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+        for (int i = 0; i < NUMBER_OF_COLS; i++) {
+            Bubble *b = bubblesGrid[j][i];
+            if (b.occupied) {
+                [availableColorSet addObject:[NSNumber numberWithInt:b.color]];
+            }
+        }
+    }
+    NSArray *availableColorArray = [availableColorSet allObjects];
+
+    int length = availableColorArray.count;
+    if (length > 0) {
+        return ((NSNumber*)availableColorArray[arc4random()%length]).intValue;
+    } else {
+        // defaults to red
+        return Red;
+    }
+}
+
 @end

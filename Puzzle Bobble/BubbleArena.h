@@ -17,5 +17,6 @@
 - (void)initializeLevel;
 - (void)initializeBubbleViewsInView:(UIView*)view;
 - (BOOL)checkCollisionWithActiveBubble:(Bubble*)bubble;
+- (BubbleColor)getNextBubbleColor;
 
 @end
