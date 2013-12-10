@@ -75,9 +75,9 @@
 
 - (void)moveActiveBubble {
 
-    activeBubble.center = CGPointMake(5 * activeBubbleVelocity.x + activeBubble.center.x,
-                                      5 * activeBubbleVelocity.y + activeBubble.center.y);
-    if (activeBubble.center.x > SCREEN_WIDTH || activeBubble.center.x < 0) {
+    activeBubble.center = CGPointMake(10 * activeBubbleVelocity.x + activeBubble.center.x,
+                                      10 * activeBubbleVelocity.y + activeBubble.center.y);
+    if (activeBubble.center.x > SCREEN_WIDTH - BUBBLE_DIAMETER/2 || activeBubble.center.x < BUBBLE_DIAMETER/2) {
         activeBubbleVelocity.x *= -1;
     }
     

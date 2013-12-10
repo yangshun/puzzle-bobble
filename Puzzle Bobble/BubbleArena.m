@@ -89,7 +89,7 @@
             if (b.occupied) {
                 CGFloat dist = sqrtf(powf(activeBubble.center.x - b.center.x, 2) +
                                      powf(activeBubble.center.y - b.center.y, 2));
-                if (dist < BUBBLE_DIAMETER) {
+                if (dist < 0.8 * BUBBLE_DIAMETER) {
                     collision = YES;
                 }
             }
