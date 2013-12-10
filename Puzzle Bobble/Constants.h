@@ -20,7 +20,7 @@ typedef enum BubbleColor {
     Red = 0,
     Blue = 1,
     Green = 2,
-    Yellow = 3,
+    Orange = 3,
 } BubbleColor;
 
 #endif

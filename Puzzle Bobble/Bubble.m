@@ -36,16 +36,16 @@
     color = c;
     switch (c) {
         case Red:
-            self.backgroundColor = [UIColor redColor];
+            self.image = [UIImage imageNamed:@"bubble-red"];
             break;
         case Blue:
-            self.backgroundColor = [UIColor blueColor];
+            self.image = [UIImage imageNamed:@"bubble-blue"];
             break;
         case Green:
-            self.backgroundColor = [UIColor greenColor];
+            self.image = [UIImage imageNamed:@"bubble-green"];
             break;
-        case Yellow:
-            self.backgroundColor = [UIColor yellowColor];
+        case Orange:
+            self.image = [UIImage imageNamed:@"bubble-orange"];
             break;
         default:
             self.backgroundColor = [UIColor blackColor];
