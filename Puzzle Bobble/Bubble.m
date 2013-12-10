@@ -17,8 +17,9 @@
     if (self) {
         // Initialization code
         self.center = pos;
-        self.occupied = false;
+        self.occupied = NO;
         self.layer.cornerRadius = BUBBLE_DIAMETER/2;
+        self.visited = NO;
     }
     return self;
 }

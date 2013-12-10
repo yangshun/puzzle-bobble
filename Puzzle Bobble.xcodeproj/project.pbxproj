@@ -23,6 +23,7 @@
 		6D2CCD5A1854F92100BC72F6 /* Puzzle_BobbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD591854F92100BC72F6 /* Puzzle_BobbleTests.m */; };
 		6D2CCD651854F97900BC72F6 /* Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD641854F97900BC72F6 /* Bubble.m */; };
 		6D2CCD681855F6EB00BC72F6 /* BubbleArena.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD671855F6EB00BC72F6 /* BubbleArena.m */; };
+		6D2CCD6C1856F2D500BC72F6 /* Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2CCD6B1856F2D500BC72F6 /* Queue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,8 @@
 		6D2CCD661855F6EB00BC72F6 /* BubbleArena.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleArena.h; sourceTree = "<group>"; };
 		6D2CCD671855F6EB00BC72F6 /* BubbleArena.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleArena.m; sourceTree = "<group>"; };
 		6D2CCD691856003800BC72F6 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		6D2CCD6A1856F2D500BC72F6 /* Queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queue.h; sourceTree = "<group>"; };
+		6D2CCD6B1856F2D500BC72F6 /* Queue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Queue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				6D2CCD641854F97900BC72F6 /* Bubble.m */,
 				6D2CCD661855F6EB00BC72F6 /* BubbleArena.h */,
 				6D2CCD671855F6EB00BC72F6 /* BubbleArena.m */,
+				6D2CCD6A1856F2D500BC72F6 /* Queue.h */,
+				6D2CCD6B1856F2D500BC72F6 /* Queue.m */,
 				6D2CCD461854F92100BC72F6 /* Images.xcassets */,
 				6D2CCD351854F92100BC72F6 /* Supporting Files */,
 			);
@@ -264,6 +269,7 @@
 				6D2CCD681855F6EB00BC72F6 /* BubbleArena.m in Sources */,
 				6D2CCD451854F92100BC72F6 /* ViewController.m in Sources */,
 				6D2CCD3F1854F92100BC72F6 /* AppDelegate.m in Sources */,
+				6D2CCD6C1856F2D500BC72F6 /* Queue.m in Sources */,
 				6D2CCD3B1854F92100BC72F6 /* main.m in Sources */,
 				6D2CCD651854F97900BC72F6 /* Bubble.m in Sources */,
 			);

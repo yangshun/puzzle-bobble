@@ -11,8 +11,11 @@
 
 @interface Bubble : UIImageView
 
-@property BOOL occupied;
+@property (nonatomic, assign) BOOL occupied;
 @property (nonatomic, assign) BubbleColor color;
+@property (nonatomic, assign) int row;
+@property (nonatomic, assign) int col;
+@property (nonatomic, assign) BOOL visited;
 
 - (id)initWithPosition:(CGPoint)pos;
 
