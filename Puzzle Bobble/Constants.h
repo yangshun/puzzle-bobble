@@ -10,7 +10,7 @@
 #define Puzzle_Bobble_Constants_h
 
 
-#define NUMBER_OF_ROWS 12
+#define NUMBER_OF_ROWS 10
 #define NUMBER_OF_COLS 8
 #define SCREEN_WIDTH 768.f
 #define SCREEN_HEIGHT 1024.f

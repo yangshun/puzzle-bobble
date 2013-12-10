@@ -17,6 +17,7 @@
     CGPoint activeBubbleVelocity;
     UITapGestureRecognizer *tapRecognizer;
     BubbleArena *arena;
+    CGPoint activeBubbleStartPosition;
 }
 
 @end
@@ -41,23 +42,29 @@
     
     // Add the tap gesture recognizer to the view
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    activeBubbleStartPosition = CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT - BUBBLE_DIAMETER/2);
+    [self prepareBubbleToBeFired];
+}
+
+- (void)prepareBubbleToBeFired {
+    activeBubble = [[Bubble alloc] initWithPosition:activeBubbleStartPosition];
+    activeBubble.color = arc4random() % 4;
+    activeBubble.layer.cornerRadius = BUBBLE_DIAMETER/2;
+    [self.view addSubview:activeBubble];
 
 }
 
 - (void)shootBubble:(UITapGestureRecognizer *)recognizer {
     
     CGPoint dest = [recognizer locationInView:self.view];
-    CGPoint start = CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT - BUBBLE_DIAMETER/2);
     
-    activeBubbleVelocity = CGPointMake(-1*(dest.x - start.x)/(dest.y - start.y), -1);
+    activeBubbleVelocity = CGPointMake(-1*(dest.x - activeBubbleStartPosition.x)/
+                                       (dest.y - activeBubbleStartPosition.y),
+                                       -1);
     
-    activeBubble = [[Bubble alloc] initWithPosition:start];
-    activeBubble.color = Blue;
-    activeBubble.backgroundColor = [UIColor blueColor];
-    activeBubble.layer.cornerRadius = BUBBLE_DIAMETER/2;
-    [self.view addSubview:activeBubble];
     [timer invalidate];
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.001f
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.005f
                                     target:self
                                   selector:@selector(moveActiveBubble)
                                   userInfo:nil
@@ -67,8 +74,8 @@
 
 - (void)moveActiveBubble {
 
-    activeBubble.center = CGPointMake(activeBubbleVelocity.x + activeBubble.center.x,
-                                      activeBubbleVelocity.y + activeBubble.center.y);
+    activeBubble.center = CGPointMake(5 * activeBubbleVelocity.x + activeBubble.center.x,
+                                      5 * activeBubbleVelocity.y + activeBubble.center.y);
     if (activeBubble.center.x > SCREEN_WIDTH || activeBubble.center.x < 0) {
         activeBubbleVelocity.x *= -1;
     }
@@ -76,6 +83,7 @@
     if ([arena checkCollisionWithActiveBubble:activeBubble]) {
         [timer invalidate];
         tapRecognizer.enabled = YES;
+        [self prepareBubbleToBeFired];
     }
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "BubbleArena.h"
+#import "Queue.h"
 
 @implementation BubbleArena {
 
@@ -51,13 +52,13 @@
     // code to read from file here
     
     // hardcoded level 1
-    for (int j = 0; j < 4; j++) {
+    for (int j = 0; j < 8; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
             if (j % 2 == 1 && i == NUMBER_OF_COLS - 1) {
                 continue;
             }
             bubblesGrid[j][i].occupied = YES;
-            bubblesGrid[j][i].color = Red;
+            bubblesGrid[j][i].color = arc4random() % 4;
         }
     }
 }
@@ -73,15 +74,15 @@
 }
 
 - (BOOL)checkCollisionWithActiveBubble:(Bubble *)activeBubble {
-    for (int j = 0; j < NUMBER_OF_COLS; j++) {
+    for (int j = 0; j < NUMBER_OF_ROWS; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
             Bubble *b = bubblesGrid[j][i];
             if (b.occupied) {
                 CGFloat dist = sqrtf(powf(activeBubble.center.x - b.center.x, 2) +
                                      powf(activeBubble.center.y - b.center.y, 2));
                 if (dist < BUBBLE_DIAMETER) {
+
                     Bubble *bubble = [self attachBubbleAtNearestAvailablePositionOfCollisionPoint:activeBubble];
-                    
                     return YES;
                     break;
                 }
@@ -89,6 +90,30 @@
         }
     }
     return NO;
+}
+
+- (Bubble*)attachBubbleAtNearestAvailablePositionOfCollisionPoint:(Bubble*)bubble {
+    CGFloat minDist = INFINITY;
+    int minJ, minI;
+    for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+        for (int i = 0; i < NUMBER_OF_COLS; i++) {
+            Bubble *b = bubblesGrid[j][i];
+            if (!b.occupied) {
+                CGFloat dist = sqrtf(powf(bubble.center.x - b.center.x, 2) +
+                                     powf(bubble.center.y - b.center.y, 2));
+                if (dist < minDist) {
+                    minDist = dist;
+                    minI = i;
+                    minJ = j;
+                }
+            }
+        }
+    }
+    
+    bubble.center = bubblesGrid[minJ][minI].center;
+    bubblesGrid[minJ][minI] = bubble;
+    bubblesGrid[minJ][minI].occupied = YES;
+    return bubble;
 }
 
 - (NSArray*)getAdjacentBubbles:(Bubble*)bubble {
@@ -153,30 +178,27 @@
     return [NSArray arrayWithArray:adjacentBubbles];
 }
 
-
-- (Bubble*)attachBubbleAtNearestAvailablePositionOfCollisionPoint:(Bubble*)bubble {
-    CGFloat minDist = INFINITY;
-    int minJ, minI;
-    for (int j = 0; j < NUMBER_OF_ROWS; j++) {
-        for (int i = 0; i < NUMBER_OF_COLS; i++) {
-            Bubble *b = bubblesGrid[j][i];
-            if (!b.occupied) {
-                CGFloat dist = sqrtf(powf(bubble.center.x - b.center.x, 2) +
-                                     powf(bubble.center.y - b.center.y, 2));
-                if (dist < minDist) {
-                    minDist = dist;
-                    minI = i;
-                    minJ = j;
-                }
-            }
+- (NSArray*)filterOccupiedBubbles:(NSArray*)bubbles {
+    NSMutableArray *occupiedBubbles;
+    for (Bubble *b in bubbles) {
+        if (b.occupied) {
+            [occupiedBubbles addObject:b];
         }
     }
-    
-    bubble.center = bubblesGrid[minJ][minI].center;
-    bubblesGrid[minJ][minI] = bubble;
-    bubblesGrid[minJ][minI].occupied = YES;
-    return bubble;
+    return [NSArray arrayWithArray:occupiedBubbles];
 }
+
+- (NSArray*)filterBubbles:(NSArray*)bubbles
+                  ofColor:(BubbleColor)color {
+    NSMutableArray *sameColorBubbles;
+    for (Bubble *b in bubbles) {
+        if (b.color == color) {
+            [sameColorBubbles addObject:b];
+        }
+    }
+    return [NSArray arrayWithArray:sameColorBubbles];
+}
+
 
 
 @end
