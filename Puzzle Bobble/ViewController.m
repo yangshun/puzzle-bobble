@@ -99,8 +99,10 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [arena resetLevel];
-    [self prepareBubbleToBeFired];
+    if ([alertView.title isEqualToString:@"Reset Level"] && buttonIndex == 1) {
+        [arena resetLevel];
+        [self prepareBubbleToBeFired];
+    }
 }
 
 - (void)didReceiveMemoryWarning

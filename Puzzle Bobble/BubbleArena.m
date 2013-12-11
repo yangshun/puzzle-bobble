@@ -65,7 +65,7 @@
     // code to read from file here
     
     // hardcoded level 1
-    for (int j = 0; j < 4; j++) {
+    for (int j = 0; j < 10; j++) {
         for (int i = 0; i < NUMBER_OF_COLS; i++) {
             if (j % 2 == 1 && i == NUMBER_OF_COLS - 1) {
                 continue;
@@ -330,7 +330,7 @@
         return ((NSNumber*)availableColorArray[arc4random()%length]).intValue;
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Level Complete!"
-                                                        message:@"Good job! Play again?"
+                                                        message:@"Good job! Let's play again."
                                                        delegate:self
                                               cancelButtonTitle:@"Yes"
                                               otherButtonTitles:nil];
@@ -341,7 +341,9 @@
 }
 
 - (void)alertViewCancel:(UIAlertView *)alertView {
-    [self resetLevel];
+    if ([alertView.title isEqualToString:@"Level Complete!"]) {
+        [self resetLevel];
+    }
 }
 
 - (void)resetLevel {
